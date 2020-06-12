@@ -1,0 +1,203 @@
+﻿@using FullFits_MarkSherriff.Models
+@{
+    ViewBag.Title = "Account";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+
+    FullFitsDatabaseEntity db = new FullFitsDatabaseEntity();
+
+}
+
+<h2>Account</h2>
+
+<table class="table">
+
+    @if (IsPost && Request.Form["logout"] != null)
+    {
+        //logout user
+        Session.Remove("signedInUserId");
+        Response.Redirect("AccountPage");
+
+    }else if (Session["signedInUserId"] != null)
+    {
+        if (IsPost)
+        {
+            //edit user details
+            Account editUser = db.Accounts.Find(Session["signedInUserId"]);
+            editUser.email = Request.Form["email"];
+            editUser.name = Request.Form["name"];
+            editUser.password = Request.Form["password"];
+            editUser.address = Request.Form["address"];
+            db.SaveChanges();
+        }
+        Account user = (Account)db.Accounts.Find(Session["signedInUserId"]);
+
+        <tr>
+            <td>
+
+                <h3> Hi @user.name,</h3><br />
+
+                <form class="form-horizontal" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="name">name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" style="font-weight:normal" name="name" id="name" value="@user.name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="number">number:</label>
+                        <div class="col-sm-10">
+                            @user.Id
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="email">email:</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" style="font-weight:normal" name="email" id="email" value="@user.email" required>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="password">password:</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" style="font-weight:normal" name="password" id="password" value="@user.password" required>
+                        
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="address">address:</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" style="font-weight:normal" name="address" id="address" value=" @user.address" required>
+                           
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default" id="save" name="save" value="save">save my info</button>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default" id="logout" name="logout" value="logout">logout</button>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    }
+    else
+    {
+        
+        if (IsPost)
+        {
+            if (Request.Form["userNumber"] != null)
+            {
+                Account find = db.Accounts.Find(int.Parse(Request.Form["userNumber"]));
+                if (find != null && find.password == Request.Form["password"])
+                {
+                    //sign in user
+                    Session["signedInUserId"] = int.Parse(Request.Form["userNumber"]);
+                    Response.Redirect("Index");
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <h3 style="color:red;">Error, Credentials are Incorrect</h3>
+                        </td>
+                    </tr>
+                }
+            }
+            else if (Request.Form["googleLogin"] != null)
+            {
+                Response.Redirect("/api/Account/ExternalLogin?provider=Google&response_type=token&client_id=self&redirect_uri=http%3A%2F%2Flocalhost%3A44320%2FAccountPage.cshtml&state=GerGr5JlYx4t_KpsK57GFSxVueteyBunu02xJTak5m01");
+            }
+            else
+            {
+                Account newAccount = new Account();
+                newAccount.name = Request.Form["name"];
+                newAccount.email = Request.Form["email"];
+                newAccount.address = Request.Form["address"];
+                newAccount.password = Request.Form["password"];
+
+                db.Accounts.Add(newAccount);
+                db.SaveChanges();
+
+                Session["signedInUserId"] = newAccount.Id;
+                Response.Redirect("AccountPage");
+            }
+        }
+
+       
+        <tr>
+            <td>
+                <h3>Sign In</h3><br />
+                <form class="form-horizontal" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="userNumber">user number:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" style="font-weight:normal" name="userNumber" id="userNumber" required>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="password">password:</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" style="font-weight:normal" name="password" id="password" required>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default btn-success" id="login" name="login">login</button>
+                        </div>
+                    </div>
+                </form>
+
+                Social Logins
+                <form class="form-horizontal" method="post">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default btn-primary" id="googleLogin" name="googleLogin" value="google">login with google</button>
+                        </div>
+                    </div>
+                </form>
+
+                <h3>Register</h3><br />
+                <form class="form-horizontal" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="name">name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" style="font-weight:normal" name="name" id="name" required>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="email">email:</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" style="font-weight:normal" name="email" id="email" required>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="address">address:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" style="font-weight:normal" name="address" id="address" required>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="font-weight:normal" for="password">password:</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" style="font-weight:normal" name="password" id="password" required>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default btn-primary" id="register" name="register">register</button>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
