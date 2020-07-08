@@ -1,0 +1,116 @@
+﻿@using Tyme.Models;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Tyme", "Index", "Client", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        @Html.ActionLink("dashboard", "Dashboard", "Client", new { area = "" }, new { @class = "navbar-item" })
+                    </li>
+                    <li>
+                        @Html.ActionLink("inspiration", "Inspiration", "Client", new { area = "" }, new { @class = "navbar-item" })
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["user"] != null)
+                    {
+                        User currentUser = (User)Session["user"];
+                        if (currentUser.isAdmin.ToString() == "y")
+                        {
+                            <li>
+                                @Html.ActionLink("admin", "Index", "Users", new { area = "" }, new { @class = "navbar-item" })
+                            </li>
+                        }
+
+                        <li>
+                            @{ 
+                                if (currentUser.name != null)
+                                {
+                                    <a class="navbar-item" href="~/Client/ShowAccount">@currentUser.name.ToString()</a>
+                                }
+                                else
+                                {
+                                    Html.ActionLink("My Account", "ShowAccount", "Client", new { area = "" }, new { @class = "navbar-item" });
+                                }
+                            }
+                        </li>
+                        <li>
+                            @{
+                                if (Session["userPPImage"] != null)
+                                {
+                                    <img src="@Session["userPPImage"]" class="navbar-item img-circle" onclick="@{} " height="40" width="40" style="margin-top:5px;" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/basicUserImage.png" class="navbar-item img-circle" height="40" width="40" style="margin-top:5px;" />
+                                }
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                    <li>
+                        @Html.ActionLink("account", "Login", "Client", new { area = "" }, new { @class = "navbar-item" })
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <section class="cover jumbotron jumbotron-fluid" id="cover">
+        <div class="container-fluid text-left">
+            <div class="row" style="padding-left:20px; padding-right:80px;">
+                <div class="col-5" style="width:50%; float:left;">
+                    <h1 class="display-4">Tyme.com</h1>
+                    <br />
+                    <p class="lead">
+                        Tyme, the most comprehensive and user-friendly time manger. Voted #1 in productivity for 3 years!
+                    </p>
+                </div>
+                <br />
+                <div class="col-2" style="float:right; width:40%;">
+                    <div class="card" style="background-color:white; border-radius:15px;">
+                        <div class="card-body" style="padding:5% 5%;">
+                            <h5 class="card-title">Start Today!</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Register today and start killing it at whatever you're passionate about.</h6>
+                            <br /><br /><br />
+                            <div class="text-right">
+                                @Html.ActionLink("Register Now!", "Register", "Client", new { area = "" }, new { @class = "btn btn-success" }) &nbsp;
+                                @Html.ActionLink("Already a user?", "Login", "Client", new { area = "" }, new { @class = "card-link" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><br /><br>
+    <div class="container body-content" style="float:none; margin-left:1.5em; padding-right:10em;">
+        @RenderBody()
+        <hr style="clear:both;" />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Tyme.com</p>
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿@model Tyme.Models.User
+@{
+    ViewBag.Title = "ShowAccount";
+    Layout = "~/Views/Shared/Clients_Layout.cshtml";
+}
+
+<h2>Your Account</h2>
+
+@using (Html.BeginForm("ShowAccount", "Client", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.isAdmin)
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", required = true } })
+            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", type = "email", required = true } })
+            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10" style="padding-top:0.5em;">
+            @if (ViewData["isPasswordHasValue"] == null)
+            {
+                <p>This account was started with Google. Set a password here to Login with Us.</p>
+                @Html.ActionLink("set password", "ForgotPassword")
+            }
+            else
+            {
+                <a href="~/Views/Client/ForgotPassword.cshtml">new password</a>
+            }
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">profile image</label>
+        <div class="col-md-10" style="padding-top:0.5em;">
+            <input type="file" id="fileToUpload" name="fileToUpload">
+            @Html.ValidationMessageFor(model => model.image, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save Changes" class="btn btn-success">&nbsp;&nbsp;
+            @Html.ActionLink("Logout", "Logout")
+        </div>
+    </div>
+</div>
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

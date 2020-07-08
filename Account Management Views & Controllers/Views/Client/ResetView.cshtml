@@ -1,0 +1,45 @@
+﻿@model Tyme.Models.User
+@{
+    ViewBag.Title = "ResetMe";
+    Layout = "~/Views/Shared/Clients_Layout.cshtml";
+}
+
+<h2>Set Password</h2>
+@if (Session["validReset"] != null)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2", placeholder="your new password" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", required = true } })
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br /><br /><br />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Reset Password" class="btn btn-success"><br /> <br />
+                    @Html.ActionLink("Register", "Register") |
+                    @Html.ActionLink("Login", "Login")
+                </div>
+            </div>
+            <br /><br /><br />
+        </div>
+    }
+}
+else
+{
+    <p>Sorry, seems to be an invalid link.</p>
+    <br />
+    <br />
+    @Html.ActionLink("Register", "Register")
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

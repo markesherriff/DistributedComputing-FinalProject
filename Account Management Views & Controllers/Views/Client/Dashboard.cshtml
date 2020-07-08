@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/Clients_Layout.cshtml";
+}
+
+<div style="text-align:left;">
+    <label style="float:left; font-weight:normal; font-size:30px; padding-right:30px;">Dashboard</label>
+    <div style="float:left; padding-top:10px">
+        <label style="font-weight:normal; font-size:15px;">sort:</label>
+        <select class="dropdown" name="sort" id="sort" style="font-weight:normal; font-size:15px;">
+            <option value="alphabetical">alphabetical</option>
+            <option value="daily first">daily first</option>
+            <option value="monthly">monthly</option>
+            <option value="new custom">new custom</option>
+        </select>
+    </div>
+    <div style="float:none; text-align:right; padding-top:10px;">
+        <btn class="btn btn-sm" style="font-weight:normal;">
+            <svg class="bi bi-search" width="1.5em" height="1.5em" viewBox="0 0 15 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+            </svg>
+        </btn>
+        <input type="search" id="search" name="search" placeholder="search" style="font-weight:normal; font-size:15px;" />
+    </div>
+    <hr />
+</div>
+<div style="text-align:left; margin-left:0px; padding-top:3em; margin-bottom:3em;">
+    @for (int card = 1; card <= 3; card++)
+    {
+        <div class="img-rounded" style="width:45%; float:left; background-color:InfoBackground; border-radius:1.5em; border:0.1em solid lightgray; margin-bottom:3em;">
+            <div style="margin-top:1em; margin-left:10%; font-size:1em; color:black;">
+                <p style="text-align:left; font-weight:bold; font-size:1.5em; float:left;">Bike Deliveries</p>
+                <a style="float:right; padding-right:2.5em; margin-top:1em;" href="~/Views/Client/ViewCard.cshtml">
+                    <svg class="bi bi-info-square" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="darkblue" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                        <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z" />
+                        <circle cx="8" cy="4.5" r="1" />
+                    </svg>
+                </a>
+                <p style="text-align:left; font-weight:normal; clear:both;">June 1 - June 28</p>
+            </div>
+            <div style="overflow-y:scroll; max-height:15em; margin-right:1em; background-color:white;">
+                @for (double contentRow = 1; contentRow <= 28; contentRow++)
+                {
+                    <p style="margin:0 0; padding-right:1.5%; width:10%; text-align:right; color:black; float:left; font-weight:bold; clear:left; background-color:InfoBackground;">@contentRow</p>
+                    <p style="margin: 0 0; width: 90%; background-color: darkblue; float: left; border: 0.05em solid lightgray;">&nbsp;</p>
+                }
+            </div>
+            <p style="margin: 0 0; height: 10%; clear: both;">&nbsp;</p>
+        </div>
+        if (card % 2 != 0)
+        {
+            <p style="margin: 0 0; width: 10%; float: left;">&nbsp;</p>
+        }
+    }
+</div>
+<br />
+<div style="text-align:left; margin-left:0px; padding-top:3em; margin-bottom:3em;">
+        <div class="img-rounded" style="width:100%; float:left; background-color:InfoBackground; border-radius:1.5em; border:0.1em solid lightgray; margin-bottom:3em;">
+            <div style="margin-top:1em; margin-left:5%; margin-right:5%; font-size:1em; color:black;">
+                <p style="text-align:left; font-weight:bold; font-size:2em; float:left;">Calendar</p>
+                <a style="float:left;" href="~/Views/Client/ViewCard.cshtml"><img style="width:2em; height:2em; margin-left:0.5em; margin-top:0.5em;" src="~/Content/infoBtn.png" /></a>
+                <p style="text-align:left; font-weight:normal; clear:both;">June 2020</p>
+            </div>
+            <div style="margin-left:5%; margin-right:5%;">
+                @for (double dayOfMonth = 1; dayOfMonth <= 28; dayOfMonth++)
+                {
+                    <div style="width:13%; margin-right:0.5em; margin-bottom:0.5em; float:left;">
+                         <p style="margin-bottom:0px; text-align:left; padding-left:0.5em; border-top-right-radius:0.5em; border-top-left-radius:0.5em; background-color:lightgray; color:white; font-weight:bold; clear:both;">@dayOfMonth</p>
+                         <div style="background-color:white; border-bottom-left-radius:0.5em; height:5em; border-bottom-right-radius:0.5em; border:0.2em solid lightgray;">
+                             <p style="text-align:left; height:1em; width:100%; margin-bottom:0px; font-weight:normal; clear:both; background-color:darkred;">&nbsp;</p>
+                             <p style="text-align:left; height:1em; width:100%; margin-top:0px; font-weight:normal; clear:both; background-color:darkblue;">&nbsp;</p>
+                         </div>
+                    </div>
+                }
+            </div>
+            <p style="margin: 0 0; height: 10%; clear: both;">&nbsp;</p>
+        </div>
+</div>
+<br />
